@@ -49,17 +49,15 @@ class UsersController extends Controller
 
     public function store( Request $request)
     {
-        $user = new User();
+
         $attr = $request->validate([
             'name' => ['required', 'min:3'],
             'email' => ['required'],
             'birthdate' =>  ['required'],
             'password' => ['required', 'min:8', 'confirmed' ]
         ]);
-        $user = $user->create($attr);
-        $user = $user->update($attr);
+        $user = User::create($attr);
         return redirect(route('users.show', $user))->with('message', 'User successfully created');
     }
-
 
 }

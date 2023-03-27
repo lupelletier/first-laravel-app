@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 class UsersController extends Controller
@@ -35,8 +36,10 @@ class UsersController extends Controller
     {
         $attr = $request->validate([
             'name' => ['required', 'min:3'],
-            'email' => ['required']
+            'email' => ['required'],
+            'password' => ['required'],
         ]);
+        $attr['password'] = Hash::make($attr['password']);
         $success = $user->update($attr);
         if ($success)
         return redirect(route('users.show', $user))->with('message', 'User successfully edited');
@@ -49,15 +52,14 @@ class UsersController extends Controller
 
     public function store( Request $request)
     {
-
         $attr = $request->validate([
             'name' => ['required', 'min:3'],
             'email' => ['required'],
             'birthdate' =>  ['required'],
             'password' => ['required', 'min:8', 'confirmed' ]
         ]);
+       $attr['password'] = Hash::make($attr['password']);
         $user = User::create($attr);
         return redirect(route('users.show', $user))->with('message', 'User successfully created');
     }
-
 }

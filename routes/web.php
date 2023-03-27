@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\User;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,31 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
+Route::resource('users', \App\Http\Controllers\UsersController::class)->middleware('auth');
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('login', function(){
-   return 'login';
-})->name('login');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-//Route::get('users/create', [\App\Http\Controllers\UsersController::class, 'create'])->name('users.create');
-//
-//Route::put('users/store', [\App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
-//
-//Route::get('users', [\App\Http\Controllers\UsersController::class, 'index'])->name('users.index');
-//
-//Route::delete('users/{user}', [\App\Http\Controllers\UsersController::class, 'destroy'])->name('users.destroy');
-//
-//Route::get('users/{user}', [\App\Http\Controllers\UsersController::class, 'show'])->name('users.show');
-//
-//Route::put('users/{user}', [\App\Http\Controllers\UsersController::class, 'update'])->name('users.update');
-//
-//Route::get('users/{user}/edit', [\App\Http\Controllers\UsersController::class, 'edit'])->name('users.edit');
-
-Route::resource('users', \App\Http\Controllers\UsersController::class);
-
-
-
-//Route::get('users/{user}/edit', [\App\Http\Controllers\UsersController::class, 'editUser'])->name('users.edit-user');
+require __DIR__.'/auth.php';

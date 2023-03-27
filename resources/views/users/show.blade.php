@@ -5,27 +5,31 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.11/dist/css/uikit.min.css" />
     <title>User profile</title>
 </head>
 <body>
-<article>
-    <h1>{{$user->name}}</h1>
+<section class="uk-card uk-card-default uk-card-body uk-margin">
+    <div >
+        <h1>{{$user->name}}</h1>
+        <li>{{$user->name}}</li>
+        <li>{{$user->email}}</li>
+        <li>{{$user->id}}</li>
+        <li>{{$user->birthdate}}</li>
+    </div>
 
-    <li>{{$user->name}}</li>
-    <li>{{$user->email}}</li>
-    <li>{{$user->id}}</li>
-    <li>{{$user->birthdate}}</li>
-    <li>{{$user->password}}</li>
+    <br>
 
-</article>
+    <form action="{{route('users.index', $user)}}" method="GET">
+        @csrf
+        @method('get')
+        <button class="uk-button uk-button-primary" type="submit">Go back</button>
+    </form>
+
+</section>
 
 <br>
-<form action="{{route('users.index', $user)}}" method="GET">
-    @csrf
-    @method('get')
-    <button type="submit">Go back</button>
-</form>
+
 <h2>{{ session('message') }}
 </h2>
 
